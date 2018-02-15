@@ -1,0 +1,17 @@
+---
+
+## Jdk Default Variables ##
+
+# jdk_url - the url to download the jdk from
+jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.tar.gz
+# jdk_download_desination - the destination to put the rpm or tarball when downloading
+jdk_download_destination: /root
+# jdk_install_dir - the directory where the rpm would be installed or the tarball moved to (/usr/java in most cases)
+jdk_install_dir: /usr/java
+# jdk_is_defualt - if this jdk is to be the default jdk and be linked to /usr/bin (only needed for tarball installs)
+jdk_is_defualt: yes
+# jdk_is_latest - if this jdk should be linked as the latest version installed 
+jdk_is_latest: yes
+# jdk_clean_installer - boolean to remove the jdk installer (rpm or tarball)
+jdk_clean_installer: yes
+

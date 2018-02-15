@@ -1,0 +1,41 @@
+---
+
+## Jdk Main ##
+
+- name: Set Common Jdk Facts
+  include: facts.yml
+
+- name: Jdk Download S3
+  include: download-s3.yml
+  static: no
+  when: jdk_download_proto == "s3"
+
+- name: Jdk Download Web - Old Scheme
+  include: download-web-old-scheme.yml
+  static: no
+  when: (jdk_download_proto == "http" or jdk_download_proto == "https") and 
+        jdk_old_name_scheme != "" 
+
+- name: Jdk Download Web - New Scheme
+  include: download-web-new-scheme.yml
+  static: no
+  when: (jdk_download_proto == "http" or jdk_download_proto == "https") and 
+        jdk_old_name_scheme == ""
+
+- name: Jdk Install - RPM
+  include: install-rpm.yml
+  static: no
+  when: jdk_artifact_type == "rpm" and
+        jdk_install_check.rc != 0
+
+- name: Jdk Install - Tarball
+  include: install-tarball.yml
+  static: no
+  when: jdk_artifact_type == "tar.gz" and
+        jdk_install_check.rc != 0
+
+- name: Clean Jdk Installer
+  include: clean-installer.yml
+  static: no
+  when: jdk_clean_installer and
+        jdk_install_check != 0 

@@ -1,0 +1,8 @@
+---
+
+## Jdk RPM Install Tasks ##
+
+- name: Install Jdk RPM
+  yum: 
+    name: "{{ jdk_download_destination }}/{{ jdk_archive_filename }}"
+    state: present

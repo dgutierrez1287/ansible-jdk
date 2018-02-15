@@ -1,0 +1,56 @@
+---
+
+## Jdk Tarball Install Tasks ##
+
+- name: Ensure Jdk Install Dir exists
+  file:
+    path: "{{ jdk_install_dir }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Unarchive Tar to Install Dir 
+  unarchive:
+    src: "{{ jdk_download_destination }}/{{ jdk_archive_filename }}"
+    dest: "{{ jdk_install_dir }}"
+    remote_src: yes
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Link Jdk as default when set as Default
+  file: 
+    src: "{{ jdk_installed_path }}"
+    dest: "{{ jdk_install_dir }}/default"
+    state: link
+    owner: root
+    group: root
+  when: jdk_is_default
+
+- name: Link java Binary when default Jdk
+  file: 
+    src: "{{ jdk_installed_path }}/bin/java"
+    dest: "/usr/bin/java"
+    state: link
+    owner: root
+    group: root
+  when: jdk_is_default
+
+- name: Link javac Binary when default Jdk
+  file: 
+    src: "{{ jdk_installed_path }}/bin/javac"
+    dest: "/usr/bin/javac"
+    state: link
+    owner: root
+    group: root
+  when: jdk_is_default
+
+- name: Link Jdk as latest when set as latest
+  file: 
+    src: "{{ jdk_installed_path }}"
+    dest: "{{ jdk_install_dir }}/latest"
+    state: link
+    owner: root
+    group: root
+  when: jdk_is_latest

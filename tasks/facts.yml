@@ -1,0 +1,48 @@
+---
+
+## Jdk Common Facts ##
+
+- name: Set Jdk Download protocol
+  set_fact:
+    jdk_download_proto: "{{ jdk_url | regex_replace('^(.*)://.*$', '\\1') }}"
+
+- name: Set Jdk Archive Type
+  set_fact:
+    jdk_artifact_type: "{{ jdk_url | regex_replace('^.*\\.(tar.gz|rpm)$', '\\1') }}"
+
+- name: Set Jdk Archive File Name
+  set_fact:
+    jdk_archive_filename: "{{ jdk_url | regex_replace('^.*/(.*)', '\\1') }}"
+
+- name: Test for old archive naming
+  set_fact:
+    jdk_old_name_scheme: "{{ jdk_archive_filename | regex_search('^jdk-\\d+u\\d+') }}"
+  
+- name: Get Version (old scheme)
+  set_fact:
+    jdk_version: "{{ jdk_archive_filename | regex_replace('^jdk-(\\d+)u.*', '\\1') }}"
+  when: jdk_old_name_scheme != ""
+
+- name: Get Build (old scheme)
+  set_fact:
+    jdk_build: "{{ jdk_archive_filename | regex_replace('^jdk-\\d+u(\\d+)-.*', '\\1') }}" 
+  when: jdk_old_name_scheme != ""
+
+- name: Get Version (new scheme)
+  set_fact:
+    jdk_version: "{{ jdk_archive_filename | regex_replace('^jdk-(\\d+\\.\\d+\\.\\d+).*', '\\1') }}"
+  when: jdk_old_name_scheme == ""
+
+- name: Set Jdk installed Directoy (old scheme)
+  set_fact:
+    jdk_installed_path: "{{ jdk_install_dir }}/jdk1.{{ jdk_version }}.0_{{ jdk_build }}"
+  when: jdk_old_name_scheme != ""
+
+- name: Set Jdk Installed Directory (new scheme)
+  set_fact:
+    jdk_installed_path: "{{ jdk_install_dir }}/jdk-{{ jdk_version }}"
+  when: jdk_old_name_scheme == ""
+
+- name: Test for Oracle site download
+  set_fact:
+    jdk_oracle_site_test: "{{ jdk_url | regex_search('download.oracle.com') }}"

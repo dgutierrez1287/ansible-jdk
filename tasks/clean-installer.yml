@@ -1,0 +1,9 @@
+---
+
+# Jdk Clean Archive Tasks #
+
+- name: Ensure the installer archive is cleaned up
+  file:
+    path: "{{ jdk_download_destination }}/{{ jdk_archive_filename }}"
+    state: absent
+    
